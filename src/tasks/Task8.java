@@ -2,15 +2,13 @@ package tasks;
 
 import common.Person;
 import common.Task;
+import org.w3c.dom.ls.LSOutput;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 
 /*
 А теперь о горьком
@@ -22,76 +20,102 @@ P.S. функции тут разные и рабочие (наверное), н
 P.P.S Здесь ваши правки желательно прокомментировать (можно на гитхабе в пулл реквесте)
  */
 public class Task8 implements Task {
-
-  private long count;
+    //count больше не используется
+//  private long count;
 
   //Не хотим выдывать апи нашу фальшивую персону, поэтому конвертим начиная со второй
   public List<String> getNames(List<Person> persons) {
-    if (persons.size() == 0) {
-      return Collections.emptyList();
-    }
-    persons.remove(0);
-    return persons.stream().map(Person::getFirstName).collect(Collectors.toList());
+//    if (persons.size() == 0) {
+//      return Collections.emptyList();
+//    }
+//    persons.remove(0);
+
+    // Если нужно скипнуть первый элемент - достаточно скипнуть его в стриме, а не выпиливать из листа.
+    // Пустой лист обработается корректно стримом
+
+    return persons.stream().skip(1).map(Person::getFirstName).collect(Collectors.toList());
   }
 
   //ну и различные имена тоже хочется
   public Set<String> getDifferentNames(List<Person> persons) {
-    return getNames(persons).stream().distinct().collect(Collectors.toSet());
+//  return getNames(persons).stream().distinct().collect(Collectors.toSet());
+
+    //Множественные ненужные преобразования
+    return new HashSet<>(getNames(persons));
   }
 
   //Для фронтов выдадим полное имя, а то сами не могут
   public String convertPersonToString(Person person) {
-    String result = "";
-    if (person.getSecondName() != null) {
-      result += person.getSecondName();
-    }
+//  String result = "";
+//
+//    if (person.getSecondName() != null) {
+//    result += person.getSecondName();
+//    }
+//
+//    if (person.getFirstName() != null) {
+//    result += " " + person.getFirstName();
+//    }
+//
+//    if (person.getMiddleName() != null) {
+//    result += " " + person.getSecondName();
+//    }
+//
+//    return result;
 
-    if (person.getFirstName() != null) {
-      result += " " + person.getFirstName();
-    }
+    //Зачем 2 раза собирать secondName? По-логике, нужен middleName
 
-    if (person.getSecondName() != null) {
-      result += " " + person.getSecondName();
-    }
-    return result;
+    return Stream.of(person.getSecondName(),person.getMiddleName(),person.getSecondName())
+            .filter(Objects::nonNull)
+            .collect(joining(" "));
   }
 
   // словарь id персоны -> ее имя
   public Map<Integer, String> getPersonNames(Collection<Person> persons) {
-    Map<Integer, String> map = new HashMap<>(1);
-    for (Person person : persons) {
-      if (!map.containsKey(person.getId())) {
-        map.put(person.getId(), convertPersonToString(person));
-      }
-    }
-    return map;
+//    Map<Integer, String> map = new HashMap<>(1);
+//    for (Person person : persons) {
+//      if (!map.containsKey(person.getId())) {
+//        map.put(person.getId(), convertPersonToString(person));
+//      }
+//    }
+//    return map;
+
+    //Стримом лакончинее
+    return persons.stream().collect(Collectors.toMap(Person::getId, this::convertPersonToString));
   }
 
   // есть ли совпадающие в двух коллекциях персоны?
   public boolean hasSamePersons(Collection<Person> persons1, Collection<Person> persons2) {
-    boolean has = false;
-    for (Person person1 : persons1) {
-      for (Person person2 : persons2) {
-        if (person1.equals(person2)) {
-          has = true;
-        }
-      }
-    }
-    return has;
+//    boolean has = false;
+//    for (Person person1 : persons1) {
+//      for (Person person2 : persons2) {
+//        if (person1.equals(person2)) {
+//          has = true;
+//        }
+//      }
+//    }
+//    return has;
+
+    //достаточно собрать 2 коллекции в сет и сравнить размеры сета и сумму размеров исходных коллекций
+    return Stream.concat(persons1.stream(),persons2.stream()).collect(Collectors.toSet()).size() < persons1.size()+persons2.size();
   }
 
   //Выглядит вроде неплохо...
   public long countEven(Stream<Integer> numbers) {
-    count = 0;
-    numbers.filter(num -> num % 2 == 0).forEach(num -> count++);
-    return count;
+//    count = 0;
+//    numbers.filter(num -> num % 2 == 0).forEach(num -> count++);
+//    return count;
+
+    //Так выглядит еще лучше
+    return numbers.filter(num -> num % 2 == 0).count();
   }
 
   @Override
   public boolean check() {
-    System.out.println("Слабо дойти до сюда и исправить Fail этой таски?");
-    boolean codeSmellsGood = false;
-    boolean reviewerDrunk = false;
-    return codeSmellsGood || reviewerDrunk;
+//    System.out.println("Слабо дойти до сюда и исправить Fail этой таски?");
+    System.out.println("You're awesome!");
+//    boolean codeSmellsGood = false;
+//    boolean reviewerDrunk = false;
+//    return codeSmellsGood || reviewerDrunk;
+    return true;
   }
 }
