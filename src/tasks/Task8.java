@@ -23,29 +23,29 @@ public class Task8 implements Task {
     //count больше не используется
 //  private long count;
 
-  //Не хотим выдывать апи нашу фальшивую персону, поэтому конвертим начиная со второй
-  public List<String> getNames(List<Person> persons) {
+    //Не хотим выдывать апи нашу фальшивую персону, поэтому конвертим начиная со второй
+    public List<String> getNames(List<Person> persons) {
 //    if (persons.size() == 0) {
 //      return Collections.emptyList();
 //    }
 //    persons.remove(0);
 
-    // Если нужно скипнуть первый элемент - достаточно скипнуть его в стриме, а не выпиливать из листа.
-    // Пустой лист обработается корректно стримом
+        // Если нужно скипнуть первый элемент - достаточно скипнуть его в стриме, а не выпиливать из листа.
+        // Пустой лист обработается корректно стримом
 
-    return persons.stream().skip(1).map(Person::getFirstName).collect(Collectors.toList());
-  }
+        return persons.stream().skip(1).map(Person::getFirstName).collect(Collectors.toList());
+    }
 
-  //ну и различные имена тоже хочется
-  public Set<String> getDifferentNames(List<Person> persons) {
+    //ну и различные имена тоже хочется
+    public Set<String> getDifferentNames(List<Person> persons) {
 //  return getNames(persons).stream().distinct().collect(Collectors.toSet());
 
-    //Множественные ненужные преобразования
-    return new HashSet<>(getNames(persons));
-  }
+        //Множественные ненужные преобразования
+        return new HashSet<>(getNames(persons));
+    }
 
-  //Для фронтов выдадим полное имя, а то сами не могут
-  public String convertPersonToString(Person person) {
+    //Для фронтов выдадим полное имя, а то сами не могут
+    public String convertPersonToString(Person person) {
 //  String result = "";
 //
 //    if (person.getSecondName() != null) {
@@ -62,15 +62,15 @@ public class Task8 implements Task {
 //
 //    return result;
 
-    //Зачем 2 раза собирать secondName? По-логике, нужен middleName
+        //Зачем 2 раза собирать secondName? По-логике, нужен middleName
 
-    return Stream.of(person.getSecondName(),person.getMiddleName(),person.getSecondName())
-            .filter(Objects::nonNull)
-            .collect(joining(" "));
-  }
+        return Stream.of(person.getSecondName(), person.getMiddleName(), person.getSecondName())
+                .filter(Objects::nonNull)
+                .collect(joining(" "));
+    }
 
-  // словарь id персоны -> ее имя
-  public Map<Integer, String> getPersonNames(Collection<Person> persons) {
+    // словарь id персоны -> ее имя
+    public Map<Integer, String> getPersonNames(Collection<Person> persons) {
 //    Map<Integer, String> map = new HashMap<>(1);
 //    for (Person person : persons) {
 //      if (!map.containsKey(person.getId())) {
@@ -79,12 +79,12 @@ public class Task8 implements Task {
 //    }
 //    return map;
 
-    //Стримом лакончинее
-    return persons.stream().collect(Collectors.toMap(Person::getId, this::convertPersonToString));
-  }
+        //Стримом лакончинее
+        return persons.stream().collect(Collectors.toMap(Person::getId, this::convertPersonToString));
+    }
 
-  // есть ли совпадающие в двух коллекциях персоны?
-  public boolean hasSamePersons(Collection<Person> persons1, Collection<Person> persons2) {
+    // есть ли совпадающие в двух коллекциях персоны?
+    public boolean hasSamePersons(Collection<Person> persons1, Collection<Person> persons2) {
 //    boolean has = false;
 //    for (Person person1 : persons1) {
 //      for (Person person2 : persons2) {
@@ -94,28 +94,29 @@ public class Task8 implements Task {
 //      }
 //    }
 //    return has;
+      //Достаточно узнать есть ли пересечения двух сетов из переданных коллекций
+        Set<Person> persons = new HashSet<>(persons1);
+        persons.retainAll(new HashSet<>(persons2));
+        return !persons.isEmpty();
+    }
 
-    //достаточно собрать 2 коллекции в сет и сравнить размеры сета и сумму размеров исходных коллекций
-    return Stream.concat(persons1.stream(),persons2.stream()).collect(Collectors.toSet()).size() < persons1.size()+persons2.size();
-  }
-
-  //Выглядит вроде неплохо...
-  public long countEven(Stream<Integer> numbers) {
+    //Выглядит вроде неплохо...
+    public long countEven(Stream<Integer> numbers) {
 //    count = 0;
 //    numbers.filter(num -> num % 2 == 0).forEach(num -> count++);
 //    return count;
 
-    //Так выглядит еще лучше
-    return numbers.filter(num -> num % 2 == 0).count();
-  }
+        //Так выглядит еще лучше
+        return numbers.filter(num -> num % 2 == 0).count();
+    }
 
-  @Override
-  public boolean check() {
+    @Override
+    public boolean check() {
 //    System.out.println("Слабо дойти до сюда и исправить Fail этой таски?");
-    System.out.println("You're awesome!");
+        System.out.println("You're awesome!");
 //    boolean codeSmellsGood = false;
 //    boolean reviewerDrunk = false;
 //    return codeSmellsGood || reviewerDrunk;
-    return true;
-  }
+        return true;
+    }
 }
