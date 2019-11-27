@@ -80,7 +80,9 @@ public class Task8 implements Task {
 //    return map;
 
         //Стримом лакончинее
-        return persons.stream().collect(Collectors.toMap(Person::getId, this::convertPersonToString));
+        return persons.stream()
+                .filter(person -> person.getId()!=null)
+                .collect(Collectors.toMap(Person::getId, this::convertPersonToString));
     }
 
     // есть ли совпадающие в двух коллекциях персоны?
