@@ -23,14 +23,14 @@ public class Task6 implements Task {
                                               Map<Integer, Set<Integer>> personAreaIds,
                                               Collection<Area> areas) {
 
-        Map<Integer, String> areasID = areas.stream()
+        Map<Integer, String> areaNames = areas.stream()
                 .collect(Collectors.toMap(Area::getId, Area::getName));
 
         Set<String> nameArea = new HashSet<>();
 
         persons.forEach(person -> personAreaIds.get(person.getId())
                 .stream()
-                .map(areaID -> person.getFirstName() + " - " + areasID.get(areaID))
+                .map(areaID -> person.getFirstName() + " - " + areaNames.get(areaID))
                 .forEach(nameArea::add));
         return nameArea;
     }
