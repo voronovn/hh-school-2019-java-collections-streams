@@ -97,9 +97,11 @@ public class Task8 implements Task {
 //    }
 //    return has;
       //Достаточно узнать есть ли пересечения двух сетов из переданных коллекций
-        Set<Person> persons = new HashSet<>(persons1);
-        persons.retainAll(new HashSet<>(persons2));
-        return !persons.isEmpty();
+        //        Set<Person> persons = new HashSet<>(persons1);
+        //        persons.retainAll(new HashSet<>(persons2));
+        //        return !persons.isEmpty();
+        //Но можно и через стрим
+        return persons1.stream().anyMatch(persons2::contains);
     }
 
     //Выглядит вроде неплохо...
