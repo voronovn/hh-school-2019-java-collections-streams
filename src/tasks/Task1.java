@@ -17,9 +17,9 @@ public class Task1 implements Task {
 
     // !!! Редактируйте этот метод !!!
     private List<Person> findOrderedPersons(List<Integer> personIds) {
-        Set<Person> persons = PersonService.findPersons(personIds);
-        HashMap<Integer,Person> personsID = new HashMap<>();
-        persons.forEach(person -> personsID.put(person.getId(),person));
+        Map<Integer,Person> personsID = PersonService.findPersons(personIds).stream()
+                .collect(Collectors.toMap(Person::getId,person -> person));
+
         return  personIds.stream()
                 .map(personsID::get)
                 .collect(Collectors.toList());
