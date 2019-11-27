@@ -22,17 +22,15 @@ public class Task6 implements Task {
     private Set<String> getPersonDescriptions(Collection<Person> persons,
                                               Map<Integer, Set<Integer>> personAreaIds,
                                               Collection<Area> areas) {
-
         Map<Integer, String> areaNames = areas.stream()
                 .collect(Collectors.toMap(Area::getId, Area::getName));
 
-        Set<String> nameArea = new HashSet<>();
+        return persons.stream()
+                .filter(person -> personAreaIds.get(person.getId())!=null)
+                .flatMap(person -> personAreaIds.get(person.getId()).stream()
+                        .map(areaID -> person.getFirstName() + " - " + areaNames.get(areaID)))
+                .collect(Collectors.toSet());
 
-        persons.forEach(person -> personAreaIds.get(person.getId())
-                .stream()
-                .map(areaID -> person.getFirstName() + " - " + areaNames.get(areaID))
-                .forEach(nameArea::add));
-        return nameArea;
     }
 
     @Override
