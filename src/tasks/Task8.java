@@ -81,8 +81,7 @@ public class Task8 implements Task {
 
         //Стримом лакончинее
         return persons.stream()
-                .filter(person -> person.getId()!=null)
-                .collect(Collectors.toMap(Person::getId, this::convertPersonToString));
+                .collect(Collectors.toMap(Person::getId, this::convertPersonToString,(id1, id2) -> id1));
     }
 
     // есть ли совпадающие в двух коллекциях персоны?
@@ -107,7 +106,7 @@ public class Task8 implements Task {
     //Выглядит вроде неплохо...
     public long countEven(Stream<Integer> numbers) {
 //    count = 0;
-//    numbers.filter(num -> num % 2 == 0).forEach(num -> count++);
+//    numbers.filter(num -> num % 2 == 0).forEach(num -> cogit config http.sslVerify falseunt++);
 //    return count;
 
         //Так выглядит еще лучше
