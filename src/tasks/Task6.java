@@ -25,11 +25,12 @@ public class Task6 implements Task {
         Map<Integer, String> areaNames = areas.stream()
                 .collect(Collectors.toMap(Area::getId, Area::getName));
 
+
         return persons.stream()
-                .filter(person -> personAreaIds.get(person.getId())!=null)
-                .flatMap(person -> personAreaIds.get(person.getId()).stream()
+                .flatMap(person -> personAreaIds.getOrDefault(person.getId(), Collections.emptySet()).stream()
                         .map(areaID -> person.getFirstName() + " - " + areaNames.get(areaID)))
                 .collect(Collectors.toSet());
+
 
     }
 
@@ -37,7 +38,8 @@ public class Task6 implements Task {
     public boolean check() {
         List<Person> persons = List.of(
                 new Person(1, "Oleg", Instant.now()),
-                new Person(2, "Vasya", Instant.now())
+                new Person(2, "Vasya", Instant.now()),
+                new Person(3, "Homeless", Instant.now())
         );
         Map<Integer, Set<Integer>> personAreaIds = Map.of(1, Set.of(1, 2), 2, Set.of(2, 3));
         List<Area> areas = List.of(new Area(1, "Moscow"), new Area(2, "Spb"), new Area(3, "Ivanovo"));
