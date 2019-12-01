@@ -100,7 +100,8 @@ public class Task8 implements Task {
         //        persons.retainAll(new HashSet<>(persons2));
         //        return !persons.isEmpty();
         //Но можно и через стрим
-        return persons1.stream().anyMatch(person -> new HashSet<>(persons2).contains(person));
+        Set<Person> persons2Set = new HashSet<>(persons2);
+        return persons1.stream().anyMatch(persons2Set::contains);
     }
 
     //Выглядит вроде неплохо...
